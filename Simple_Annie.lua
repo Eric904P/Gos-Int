@@ -78,8 +78,8 @@ OnRemoveBuff(function(unit,buff)
 	end 
 end)
 
-OnSpellCast(function(unit,spell)
-	if unit and spell and (unit == GetMyHero()) and (spell.name == "InfernalGuardian") and AnnieMenu.Misc.rblk.Value() then
+OnSpellCast(function(spell)
+	if spell and (spell.name == "InfernalGuardian") and AnnieMenu.Misc.rblk.Value() then
 		local spellPred = GetCircularAOEPrediction(spell.target, Rdata, spell.startPos)
 		if (spellPred.hitChance <= 0.8) then 
 			spell.BlockCast() 
@@ -112,7 +112,7 @@ OnProcessSpell(function(unit,spell)
 				elseif not spell.target then
 					local endPos1 = Vector(unit.visionPos) + 300 * (Vector(spell.endPos) - Vector(unit.visionPos)):normalized()
 	                local endPos2 = Vector(unit.visionPos) + 100 * (Vector(spell.endPos) - Vector(unit.visionPos)):normalized()
-	                if (GetDistanceSqr(myHero.visionPos, unit.visionPos) > GetDistanceSqr(myHero.visionPos, endPos1) or GetDistanceSqr(myHero.visionPos, unit.visionPos) > GetDistanceSqr(myHero.visionPos, endPos2))  then
+	                if GetDistanceSqr(myHero.visionPos, unit.visionPos) > GetDistanceSqr(myHero.visionPos, endPos1) or GetDistanceSqr(myHero.visionPos, unit.visionPos) > GetDistanceSqr(myHero.visionPos, endPos2)  then
 	                    add = true
 	                end
 	            end

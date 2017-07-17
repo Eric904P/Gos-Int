@@ -64,6 +64,36 @@ local _GAPCLOSER_SPELLS = {
     ["YasuoDashWrapper"]     = "Yasuo"
 }
 
+--[[MENU SETUP]]
+
+local AnnieMenu = Menu("Annie", "Annie")						--Create a New Menu and call it AnnieMenu (the user only sees "Annie")
+
+	AnnieMenu:SubMenu("Combo", "Combo")							--Create a New SubMenu and call it Combo
+	AnnieMenu.Combo:Boolean("Q", "Use Q", true)						--Add a button to toggle the usage of Q
+	AnnieMenu.Combo:Boolean("W", "Use W", true)						--Add a button to toggle the usage of W
+	AnnieMenu.Combo:Boolean("E", "Use E", true)
+	AnnieMenu.Combo:Boolean("R", "Use R", true)						--Add a button to toggle the usage of R
+	AnnieMenu.Combo:Boolean("Rstun", "Only R if it will stun", true)
+	AnnieMenu.Combo:Slider("Rhit", "Only R if it will hit X enemy heroes", 2, 1, 5, 1)
+	AnnieMenu.Combo:List("ign", "Ignite mode:", 3, {"OFF", "Combo", "Killsteal"})
+
+	AnnieMenu:SubMenu("Harass", "Harass")
+	AnnieMenu.Harass:Boolean("Q", "Use Q", true)
+	AnnieMenu.Harass:Boolean("W", "Use W", true)
+	AnnieMenu.Harass:Boolean("E", "Use E", true)
+	AnnieMenu.Harass:Slider("mana", "Minimum mana %", 25, 0, 100, 1)
+
+	AnnieMenu:SubMenu("Farm", "Farm")
+	AnnieMenu.Farm:Boolean("Q", "Lasthit with Q", true)
+	AnnieMenu.Farm:Boolean("W", "Waveclear with W", true)
+	AnnieMenu.Farm:Slider("mana", "Minimum mana %", 25, 0, 100, 1)
+
+	AnnieMenu:SubMenu("Misc", "Misc")
+	AnnieMenu.Misc:KeyBinding("Rforce", "Force best R, ignoring Combo settings", string.byte("T"))
+	AnnieMenu.Misc:Boolean("rblk", "Block manual R if it will not hit", true)
+	AnnieMenu.Misc:Boolean("gap", "Use stun on gapclose", true)
+	AnnieMenu.Misc:Boolean("chnl", "Use stun to interrup channel", true)
+
 --[[EVENT HANDLERS]]
 
 OnUpdateBuff(function(unit,buff)
@@ -275,36 +305,6 @@ OnTick(function (myHero)									--The code inside the Function runs every tick
 end)		--End script
 
 --[[FUNCTIONS]]
-function DrawMenu()
-	local AnnieMenu = Menu("Annie", "Annie")						--Create a New Menu and call it AnnieMenu (the user only sees "Annie")
-
-	AnnieMenu:SubMenu("Combo", "Combo")							--Create a New SubMenu and call it Combo
-	AnnieMenu.Combo:Boolean("Q", "Use Q", true)						--Add a button to toggle the usage of Q
-	AnnieMenu.Combo:Boolean("W", "Use W", true)						--Add a button to toggle the usage of W
-	AnnieMenu.Combo:Boolean("E", "Use E", true)
-	AnnieMenu.Combo:Boolean("R", "Use R", true)						--Add a button to toggle the usage of R
-	AnnieMenu.Combo:Boolean("Rstun", "Only R if it will stun", true)
-	AnnieMenu.Combo:Slider("Rhit", "Only R if it will hit X enemy heroes", 2, 1, 5, 1)
-	AnnieMenu.Combo:List("ign", "Ignite mode:", 3, {"OFF", "Combo", "Killsteal"})
-
-	AnnieMenu:SubMenu("Harass", "Harass")
-	AnnieMenu.Harass:Boolean("Q", "Use Q", true)
-	AnnieMenu.Harass:Boolean("W", "Use W", true)
-	AnnieMenu.Harass:Boolean("E", "Use E", true)
-	AnnieMenu.Harass:Slider("mana", "Minimum mana %", 25, 0, 100, 1)
-
-	AnnieMenu:SubMenu("Farm", "Farm")
-	AnnieMenu.Farm:Boolean("Q", "Lasthit with Q", true)
-	AnnieMenu.Farm:Boolean("W", "Waveclear with W", true)
-	AnnieMenu.Farm:Slider("mana", "Minimum mana %", 25, 0, 100, 1)
-
-	AnnieMenu:SubMenu("Misc", "Misc")
-	AnnieMenu.Misc:KeyBinding("Rforce", "Force best R, ignoring Combo settings", string.byte("T"))
-	AnnieMenu.Misc:Boolean("rblk", "Block manual R if it will not hit", true)
-	AnnieMenu.Misc:Boolean("gap", "Use stun on gapclose", true)
-	AnnieMenu.Misc:Boolean("chnl", "Use stun to interrup channel", true)
-end
-
 function ReturnBestUltTarget(amountOfTargets)
 	local targ = nil
 	local range = (575)

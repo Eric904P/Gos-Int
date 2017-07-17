@@ -158,12 +158,11 @@ end)
 
 OnLoad(function(myHero)
 	FindIgnite()
-	DrawMenu()
 	Say("LOADED! GLHF :)")
 end)
 
 OnDraw(function(myHero)
-	DrawCircle(myHero.x, myHero.y, myHero.z, 625, 0x111111)
+	DrawCircle(GetOrigin(myHero), 625, 1, 0, 0x111111) --[[BUG IS HERE: DrawCircle(XYZ(table)) expected]]
 	for i, enemy in ipairs(GetEnemyHeroes()) do
 		DrawIndicator(enemy)
 	end
@@ -229,7 +228,7 @@ OnTick(function (myHero)									--The code inside the Function runs every tick
 
 	if Mix:Mode() == "Combo" then						--Check if we are in Combo mode (holding space)
 			
-		if AnnieMenu.Misc.estk.Value() and Ready(_E) and passive < 4 then --e first to stack stun
+		if AnnieMenu.Combo.E.Value() and Ready(_E) and passive < 4 then --e first to stack stun
 			CastSpell(_E)
 		end --end E logic
 		
@@ -387,8 +386,12 @@ function Say(text)
 	print("<font color=\"#FF0000\"><b>Eric's Annie:</b></font> <font color=\"#FFFFFF\">" .. text .. "</font>")
 end
 
+
+
 function DrawIndicator(enemy)
-	local Qdmg, Wdmg, Rdmg = CalcSpellDamage(enemy)
+	local Qdmg = CalcDamage(myHero, enemy, 0, 45 + 35 * GetCastLevel(myHero,_Q) + GetBonusAP(myHero) * 0.8)
+	local Wdmg = CalcDamage(myHero, enemy, 0, 25 + 45 * GetCastLevel(myHero,_W) + GetBonusAP(myHero) * 0.85)
+	local Rdmg = CalcDamage(myHero, enemy, 0, 25 + 125 * GetCastLevel(myHero,_R) + GetBonusAP(myHero) * 0.65)
 
 	Qdmg = ((Qready and Qdmg) or 0)
 	Wdmg = ((Wready and Wdmg) or 0)
@@ -396,7 +399,9 @@ function DrawIndicator(enemy)
 
     local damage = Qdmg + Wdmg + Rdmg
 
-    local SPos, EPos = GetEnemyHPBarPos(enemy)
+    DrawDmgOverHpBar(enemy,GetCurrentHP(enemy),0,damage,GoS.White)
+
+    --[[local SPos, EPos = GetEnemyHPBarPos(enemy)
 
     -- Validate data
     if not SPos then return end
@@ -405,5 +410,5 @@ function DrawIndicator(enemy)
     local Position = SPos.x + math.max(0, (enemy.health - damage) / enemy.maxHealth) * barwidth
 
     DrawText("|", 16, math.floor(Position), math.floor(SPos.y + 8), ARGB(255,0,255,0))
-    DrawText("HP: "..math.floor(enemy.health - damage), 12, math.floor(SPos.x + 25), math.floor(SPos.y - 15), (enemy.health - damage) > 0 and ARGB(255, 0, 255, 0) or  ARGB(255, 255, 0, 0))
+    DrawText("HP: "..math.floor(enemy.health - damage), 12, math.floor(SPos.x + 25), math.floor(SPos.y - 15), (enemy.health - damage) > 0 and ARGB(255, 0, 255, 0) or  ARGB(255, 255, 0, 0))]]
 end 

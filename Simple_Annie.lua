@@ -79,9 +79,11 @@ OnRemoveBuff(function(unit,buff)
 end)
 
 OnSpellCast(function(unit,spell)
-	if unit and spell and (unit == GetMyHero()) and (spell.name = "InfernalGuardian") and AnnieMenu.Misc.rblk.Value() then
+	if unit and spell and (unit == GetMyHero()) and (spell.name == "InfernalGuardian") and AnnieMenu.Misc.rblk.Value() then
 		local spellPred = GetCircularAOEPrediction(spell.target, Rdata, spell.startPos)
-		if spellPred.hitChance < 0.8 then  spell.BlockCast() end
+		if (spellPred.hitChance <= 0.8) then 
+			spell.BlockCast() 
+		end
 	end
 end)
 
